@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import fi.haagahelia.mjtea.model.Ingredient;
 import fi.haagahelia.mjtea.model.IngredientRepository;
 import fi.haagahelia.mjtea.model.CategoryRepository;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 @Controller
 public class IngredientController {
@@ -44,6 +45,8 @@ public class IngredientController {
     }
 
     // Xóa nguyên liệu theo id
+    // Chỉ ADMIN mới xóa được
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/delete/{id}")
     public String deleteIngredient(@PathVariable("id") Long ingredientId) {
         repository.deleteById(ingredientId);

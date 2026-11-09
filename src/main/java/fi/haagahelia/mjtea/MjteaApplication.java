@@ -1,5 +1,8 @@
 package fi.haagahelia.mjtea;
 
+import fi.haagahelia.mjtea.model.AppUser;
+import fi.haagahelia.mjtea.model.AppUserRepository;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -20,7 +23,8 @@ public class MjteaApplication {
 	// CommandLineRunner chạy 1 lần khi app khởi động - dùng để nạp dữ liệu mẫu
 	@Bean
 	public CommandLineRunner mjteaRunner(IngredientRepository ingredientRepository,
-			CategoryRepository categoryRepository) {
+			CategoryRepository categoryRepository,
+			AppUserRepository userRepository) {
 		return (args) -> {
 			// Chỉ nạp mẫu khi database trống (tránh lặp khi khởi động lại)
 			if (ingredientRepository.count() == 0) {
@@ -45,6 +49,12 @@ public class MjteaApplication {
 				ingredientRepository.save(new Ingredient("Flour", 20.0, "kg", 1.2, 5.0, bakery));
 				ingredientRepository.save(new Ingredient("Butter", 3.0, "kg", 8.0, 4.0, bakery)); // cảnh báo (3 < 4)
 				ingredientRepository.save(new Ingredient("Paper Cups", 500.0, "pcs", 0.05, 100.0, packaging));
+
+				BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+				userRepository.save(new AppUser("user",
+						encoder.encode("user"), "user@mjtea.fi", "USER"));
+				userRepository.save(new AppUser("admin",
+						encoder.encode("admin"), "admin@mjtea.fi", "ADMIN"));
 			}
 		};
 	}

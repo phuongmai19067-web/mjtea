@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 
 <head>
     <meta charset="UTF-8">
@@ -11,7 +11,15 @@
     <div class="container mt-4">
         <h1>MJtea — Inventory</h1>
 
-        <table class="table table-striped">
+        <!-- Hiện tên người đang đăng nhập -->
+        <p>Welcome <span sec:authentication="name">Name</span></p>
+
+        <!-- Nút đăng xuất -->
+        <form th:action="@{/logout}" method="post">
+            <input type="submit" value="Sign Out" class="btn btn-sm btn-secondary" />
+        </form>
+
+        <table class="table table-striped mt-3">
             <tr>
                 <th>Name</th>
                 <th>Category</th>
@@ -19,9 +27,9 @@
                 <th>Unit</th>
                 <th>Price (€)</th>
                 <th></th>
-                <th></th>
+                <!-- Cột Delete chỉ ADMIN thấy -->
+                <th sec:authorize="hasRole('ADMIN')"></th>
             </tr>
-            <!-- Dòng sắp hết kho (lowStock) được tô nền đỏ bằng class table-danger -->
             <tr th:each="ingredient : ${ingredients}" th:classappend="${ingredient.lowStock} ? 'table-danger' : ''">
                 <td th:text="${ingredient.name}"></td>
                 <td th:text="${ingredient.category != null ? ingredient.category.name : ''}"></td>
@@ -29,7 +37,10 @@
                 <td th:text="${ingredient.unit}"></td>
                 <td th:text="${ingredient.price}"></td>
                 <td><a class="btn btn-primary btn-sm" th:href="@{/edit/{id}(id=${ingredient.id})}">Edit</a></td>
-                <td><a class="btn btn-danger btn-sm" th:href="@{/delete/{id}(id=${ingredient.id})}">Delete</a></td>
+                <!-- Nút Delete chỉ ADMIN thấy -->
+                <td sec:authorize="hasRole('ADMIN')">
+                    <a class="btn btn-danger btn-sm" th:href="@{/delete/{id}(id=${ingredient.id})}">Delete</a>
+                </td>
             </tr>
         </table>
 
