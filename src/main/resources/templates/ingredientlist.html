@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>MJtea — Inventory</title>
+    <link type="text/css" rel="stylesheet" href="/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" />
+</head>
+
+<body>
+    <div class="container mt-4">
+        <h1>MJtea — Inventory</h1>
+
+        <table class="table table-striped">
+            <tr>
+                <th>Name</th>
+                <th>Category</th>
+                <th>Quantity</th>
+                <th>Unit</th>
+                <th>Price (€)</th>
+                <th></th>
+                <th></th>
+            </tr>
+            <!-- Dòng sắp hết kho (lowStock) được tô nền đỏ bằng class table-danger -->
+            <tr th:each="ingredient : ${ingredients}" th:classappend="${ingredient.lowStock} ? 'table-danger' : ''">
+                <td th:text="${ingredient.name}"></td>
+                <td th:text="${ingredient.category != null ? ingredient.category.name : ''}"></td>
+                <td th:text="${ingredient.quantity}"></td>
+                <td th:text="${ingredient.unit}"></td>
+                <td th:text="${ingredient.price}"></td>
+                <td><a class="btn btn-primary btn-sm" th:href="@{/edit/{id}(id=${ingredient.id})}">Edit</a></td>
+                <td><a class="btn btn-danger btn-sm" th:href="@{/delete/{id}(id=${ingredient.id})}">Delete</a></td>
+            </tr>
+        </table>
+
+        <a class="btn btn-success" th:href="@{/add}">Add Ingredient</a>
+    </div>
+</body>
+
+</html>
