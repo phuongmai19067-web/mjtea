@@ -50,11 +50,12 @@ public class MjteaApplication {
 				ingredientRepository.save(new Ingredient("Butter", 3.0, "kg", 8.0, 4.0, bakery)); // cảnh báo (3 < 4)
 				ingredientRepository.save(new Ingredient("Paper Cups", 500.0, "pcs", 0.05, 100.0, packaging));
 
+				// Thêm 2 user, hash mật khẩu bằng BCrypt
 				BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-				userRepository.save(new AppUser("user",
-						encoder.encode("user"), "user@mjtea.fi", "USER"));
-				userRepository.save(new AppUser("admin",
-						encoder.encode("admin"), "admin@mjtea.fi", "ADMIN"));
+				userRepository.save(new AppUser("staff",
+						encoder.encode("staff"), "staff@mjtea.fi", "STAFF"));
+				userRepository.save(new AppUser("manager",
+						encoder.encode("manager"), "manager@mjtea.fi", "MANAGER"));
 			}
 		};
 	}

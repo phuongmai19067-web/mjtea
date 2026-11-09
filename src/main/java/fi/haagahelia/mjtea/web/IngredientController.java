@@ -46,7 +46,8 @@ public class IngredientController {
 
     // Xóa nguyên liệu theo id
     // Chỉ ADMIN mới xóa được
-    @PreAuthorize("hasRole('ADMIN')")
+    // Chỉ MANAGER mới xóa được
+    @PreAuthorize("hasRole('MANAGER')")
     @GetMapping("/delete/{id}")
     public String deleteIngredient(@PathVariable("id") Long ingredientId) {
         repository.deleteById(ingredientId);

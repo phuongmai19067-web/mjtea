@@ -27,8 +27,8 @@
                 <th>Unit</th>
                 <th>Price (€)</th>
                 <th></th>
-                <!-- Cột Delete chỉ ADMIN thấy -->
-                <th sec:authorize="hasRole('ADMIN')"></th>
+                <!-- Cột Delete chỉ MANAGER thấy -->
+                <th sec:authorize="hasRole('MANAGER')"></th>
             </tr>
             <tr th:each="ingredient : ${ingredients}" th:classappend="${ingredient.lowStock} ? 'table-danger' : ''">
                 <td th:text="${ingredient.name}"></td>
@@ -38,7 +38,8 @@
                 <td th:text="${ingredient.price}"></td>
                 <td><a class="btn btn-primary btn-sm" th:href="@{/edit/{id}(id=${ingredient.id})}">Edit</a></td>
                 <!-- Nút Delete chỉ ADMIN thấy -->
-                <td sec:authorize="hasRole('ADMIN')">
+                <!-- Nút Delete chỉ MANAGER thấy -->
+                <td sec:authorize="hasRole('MANAGER')">
                     <a class="btn btn-danger btn-sm" th:href="@{/delete/{id}(id=${ingredient.id})}">Delete</a>
                 </td>
             </tr>
