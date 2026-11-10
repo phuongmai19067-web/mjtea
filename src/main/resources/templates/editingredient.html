@@ -19,11 +19,11 @@
         <select th:field="*{category}">
             <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}"></option>
         </select><br>
-        <button type="submit">Save</button>
         Supplier:
         <select th:field="*{supplier}">
             <option th:each="supplier : ${suppliers}" th:value="${supplier.id}" th:text="${supplier.name}"></option>
         </select><br>
+        <button type="submit">Save</button>
     </form>
 </body>
 
