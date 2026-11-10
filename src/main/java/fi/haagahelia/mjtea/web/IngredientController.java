@@ -28,8 +28,7 @@ public class IngredientController {
     @Autowired
     private SupplierRepository supplierRepository;
 
-    // Trang danh sách nguyên liệu
-    // Trang danh sách — hỗ trợ tìm kiếm (search) và lọc hàng sắp hết (lowstock)
+    // Trang danh sách — hỗ trợ tìm kiếm (search) và lọc (lowstock / expiring)
     @GetMapping("/ingredientlist")
     public String ingredientList(
             @RequestParam(required = false) String search,
@@ -45,14 +44,34 @@ public class IngredientController {
             ingredients = (List<Ingredient>) repository.findAll();
         }
 
-        // Nếu chọn lọc "lowstock" → chỉ giữ những món sắp hết kho
+        // Lọc theo lựa chọn: hàng sắp hết kho, hoặc sắp hết hạn
         if ("lowstock".equals(filter)) {
-            ingredients = ingredients.stream()
-                    .filter(Ingredient::isLowStock)
-                    .toList();
+            ingredients = ingredients.stream().filter(Ingredient::isLowStock).toList();
+        } else if ("expiring".equals(filter)) {
+            ingredients = ingredients.stream().filter(Ingredient::isExpiringSoon).toList();
         }
 
+        // Tính tổng giá trị kho = tổng của (quantity × price)
+        double totalValue = ingredients.stream()
+                .mapToDouble(i -> i.getQuantity() * i.getPrice())
+                .sum();
+
         model.addAttribute("ingredients", ingredients);
+        model.addAttribute("totalValue", totalValue);
+
+        // Số liệu tổng quan cho dashboard (tính trên TOÀN BỘ kho, không phụ thuộc
+        // search/filter)
+        List<Ingredient> allIngredients = (List<Ingredient>) repository.findAll();
+        long totalCount = allIngredients.size();
+        long lowStockCount = allIngredients.stream().filter(Ingredient::isLowStock).count();
+        long expiringCount = allIngredients.stream().filter(Ingredient::isExpiringSoon).count();
+
+        model.addAttribute("totalCount", totalCount);
+        model.addAttribute("lowStockCount", lowStockCount);
+        model.addAttribute("expiringCount", expiringCount);
+
+        model.addAttribute("ingredients", ingredients);
+        model.addAttribute("totalValue", totalValue);
         return "ingredientlist";
     }
 

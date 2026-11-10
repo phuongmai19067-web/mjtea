@@ -1,5 +1,6 @@
 package fi.haagahelia.mjtea;
 
+import java.time.LocalDate;
 import fi.haagahelia.mjtea.model.AppUser;
 import fi.haagahelia.mjtea.model.AppUserRepository;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -51,14 +52,20 @@ public class MjteaApplication {
 
 				// Tạo ingredient: name, quantity, unit, price, lowStockThreshold, category
 				// (phần gán supplier làm riêng ở dưới để code dễ đọc)
-				Ingredient blackTea = new Ingredient("Black Tea Leaves", 8.0, "kg", 25.0, 3.0, tea);
-				Ingredient oolong = new Ingredient("Oolong Tea", 2.0, "kg", 30.0, 3.0, tea);
-				Ingredient beans = new Ingredient("Coffee Beans", 15.0, "kg", 18.0, 5.0, coffee);
-				Ingredient oatMilk = new Ingredient("Oat Milk", 4.0, "liter", 2.5, 6.0, coffee);
-				Ingredient flour = new Ingredient("Flour", 20.0, "kg", 1.2, 5.0, bakery);
-				Ingredient butter = new Ingredient("Butter", 3.0, "kg", 8.0, 4.0, bakery);
-				Ingredient cups = new Ingredient("Paper Cups", 500.0, "pcs", 0.05, 100.0, packaging);
-
+				Ingredient blackTea = new Ingredient("Black Tea Leaves", 8.0, "kg", 25.0, 3.0,
+						LocalDate.now().plusMonths(6), tea);
+				Ingredient oolong = new Ingredient("Oolong Tea", 2.0, "kg", 30.0, 3.0, LocalDate.now().plusMonths(4),
+						tea);
+				Ingredient beans = new Ingredient("Coffee Beans", 15.0, "kg", 18.0, 5.0, LocalDate.now().plusMonths(3),
+						coffee);
+				Ingredient oatMilk = new Ingredient("Oat Milk", 4.0, "liter", 2.5, 6.0, LocalDate.now().plusDays(3),
+						coffee); // sắp hết hạn
+				Ingredient flour = new Ingredient("Flour", 20.0, "kg", 1.2, 5.0, LocalDate.now().plusMonths(8), bakery);
+				Ingredient butter = new Ingredient("Butter", 3.0, "kg", 8.0, 4.0, LocalDate.now().plusDays(5), bakery); // sắp
+																														// hết
+																														// hạn
+				Ingredient cups = new Ingredient("Paper Cups", 500.0, "pcs", 0.05, 100.0, LocalDate.now().plusYears(2),
+						packaging);
 				// Gán nhà cung cấp cho từng nguyên liệu
 				blackTea.setSupplier(teaHouse);
 				oolong.setSupplier(teaHouse);

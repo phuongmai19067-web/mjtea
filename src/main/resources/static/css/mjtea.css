@@ -1,0 +1,210 @@
+/* ===== MJtea — Cozy Cafe Theme ===== */
+
+:root {
+    --coffee-dark: #4a3428;
+    /* nâu cà phê đậm */
+    --coffee: #6f4e37;
+    /* nâu cà phê */
+    --latte: #c8a97e;
+    /* nâu sữa */
+    --cream: #f5ece0;
+    /* kem */
+    --cream-light: #fdf8f2;
+    /* kem nhạt (nền) */
+    --tea-green: #8ba888;
+    /* xanh trà */
+    --accent: #a0522d;
+    /* điểm nhấn nâu đỏ */
+}
+
+body {
+    background-color: var(--cream-light);
+    font-family: 'Georgia', 'Segoe UI', serif;
+    color: var(--coffee-dark);
+}
+
+/* Header kiểu bảng hiệu quán */
+.mjtea-header {
+    background: linear-gradient(135deg, var(--coffee) 0%, var(--coffee-dark) 100%);
+    color: var(--cream);
+    padding: 24px 0;
+    text-align: center;
+    border-radius: 0 0 20px 20px;
+    margin-bottom: 28px;
+    box-shadow: 0 4px 12px rgba(74, 52, 40, 0.2);
+}
+
+.mjtea-header h1 {
+    margin: 0;
+    font-size: 2.4rem;
+    letter-spacing: 1px;
+}
+
+.mjtea-header .tagline {
+    font-size: 0.95rem;
+    opacity: 0.85;
+    font-style: italic;
+    margin-top: 4px;
+}
+
+/* Thẻ bao nội dung */
+.card-box {
+    background: #fff;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 2px 10px rgba(111, 78, 55, 0.08);
+}
+
+/* Bảng */
+.table {
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.table thead tr,
+.table tr:first-child {
+    background-color: var(--coffee) !important;
+    color: var(--cream);
+}
+
+.table tr:first-child th {
+    border: none;
+    padding: 14px 12px;
+    font-weight: 600;
+}
+
+.table td {
+    vertical-align: middle;
+    padding: 12px;
+}
+
+/* Nút theo tông quán */
+.btn-primary {
+    background-color: var(--latte);
+    border-color: var(--latte);
+    color: var(--coffee-dark);
+}
+
+.btn-primary:hover {
+    background-color: var(--coffee);
+    border-color: var(--coffee);
+    color: var(--cream);
+}
+
+.btn-success {
+    background-color: var(--tea-green);
+    border-color: var(--tea-green);
+    color: #fff;
+}
+
+.btn-success:hover {
+    background-color: #6d8a6a;
+    border-color: #6d8a6a;
+}
+
+.btn-secondary {
+    background-color: var(--cream);
+    border-color: var(--latte);
+    color: var(--coffee-dark);
+}
+
+.btn-secondary:hover {
+    background-color: var(--latte);
+    color: var(--coffee-dark);
+}
+
+.btn-warning {
+    background-color: #e0b878;
+    border-color: #e0b878;
+    color: var(--coffee-dark);
+}
+
+/* Ô tìm kiếm */
+.form-control {
+    border: 1px solid var(--latte);
+    border-radius: 10px;
+}
+
+.form-control:focus {
+    border-color: var(--coffee);
+    box-shadow: 0 0 0 0.15rem rgba(111, 78, 55, 0.15);
+}
+
+/* Dòng chào + đăng xuất gọn trên 1 hàng */
+.topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.topbar .welcome {
+    font-size: 1.05rem;
+}
+
+/* Tổng giá trị kho — nổi bật như hóa đơn */
+.total-box {
+    background: var(--cream);
+    border-radius: 12px;
+    padding: 14px 20px;
+    margin-top: 18px;
+    font-size: 1.15rem;
+    color: var(--coffee-dark);
+    display: inline-block;
+}
+
+.total-box strong {
+    color: var(--accent);
+}
+
+/* ===== Dashboard — 3 ô số liệu ===== */
+.dashboard {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+}
+
+.stat-card {
+    flex: 1;
+    min-width: 160px;
+    background: #fff;
+    border-radius: 16px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 2px 10px rgba(111, 78, 55, 0.08);
+    border-top: 4px solid var(--latte);
+}
+
+.stat-card .num {
+    font-size: 2.4rem;
+    font-weight: bold;
+    color: var(--coffee-dark);
+    line-height: 1;
+}
+
+.stat-card .label {
+    font-size: 0.9rem;
+    color: var(--coffee);
+    margin-top: 6px;
+}
+
+/* Ô cảnh báo đổi màu viền cho nổi */
+.stat-card.warn-low {
+    border-top-color: #d9534f;
+}
+
+/* đỏ: sắp hết kho */
+.stat-card.warn-exp {
+    border-top-color: #e0b878;
+}
+
+/* cam: sắp hết hạn */
+.stat-card.warn-low .num {
+    color: #c0392b;
+}
+
+.stat-card.warn-exp .num {
+    color: #b8860b;
+}

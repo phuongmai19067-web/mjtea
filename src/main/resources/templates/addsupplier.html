@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Add Supplier</title>
+    <link type="text/css" rel="stylesheet" href="/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" />
+    <link type="text/css" rel="stylesheet" href="/css/mjtea.css" th:href="@{/css/mjtea.css}" />
+</head>
+
+<body>
+    <div class="container mt-4">
+        <div class="card-box">
+            <h1>Add new supplier</h1>
+            <form th:action="@{/savesupplier}" th:object="${supplier}" method="post">
+                <input type="hidden" th:field="*{id}" />
+                Name: <input type="text" th:field="*{name}" class="form-control mb-2" /><br>
+                Contact: <input type="text" th:field="*{contact}" class="form-control mb-2" /><br>
+                <button type="submit" class="btn btn-success">Save</button>
+                <a th:href="@{/supplierlist}" class="btn btn-secondary">Cancel</a>
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -5,58 +5,95 @@
     <meta charset="UTF-8">
     <title>MJtea — Inventory</title>
     <link type="text/css" rel="stylesheet" href="/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" />
+    <link type="text/css" rel="stylesheet" href="/css/mjtea.css" th:href="@{/css/mjtea.css}" />
 </head>
 
 <body>
-    <div class="container mt-4">
-        <h1>MJtea - Inventory</h1>
+    <!-- Bảng hiệu quán -->
+    <div class="mjtea-header">
+        <h1>☕ MJtea</h1>
+        <div class="tagline">Tea · Coffee · Pastry — Inventory</div>
+    </div>
 
-        <!-- Ô tìm kiếm theo tên -->
-        <form th:action="@{/ingredientlist}" method="get" class="mb-3">
-            <input type="text" name="search" placeholder="Search by name..." class="form-control d-inline-block"
-                style="width:250px" />
-            <button type="submit" class="btn btn-primary btn-sm">Search</button>
-            <a th:href="@{/ingredientlist}" class="btn btn-secondary btn-sm">Show all</a>
-            <a th:href="@{/ingredientlist(filter='lowstock')}" class="btn btn-warning btn-sm">Low stock only</a>
-        </form>
+    <div class="container">
+        <div class="card-box">
 
-        <!-- Hiện tên người đang đăng nhập -->
-        <p>Welcome <span sec:authentication="name">Name</span></p>
+            <!-- Dòng chào + đăng xuất -->
+            <div class="topbar">
+                <span class="welcome">Welcome, <strong><span sec:authentication="name">Name</span></strong> 👋</span>
+                <span>
+                    <a th:href="@{/supplierlist}" class="btn btn-sm btn-primary">Manage suppliers</a>
+                    <form th:action="@{/logout}" method="post" style="display:inline; margin:0">
+                        <input type="submit" value="Sign Out" class="btn btn-sm btn-secondary" />
+                    </form>
+                </span>
+            </div>
 
-        <!-- Nút đăng xuất -->
-        <form th:action="@{/logout}" method="post">
-            <input type="submit" value="Sign Out" class="btn btn-sm btn-secondary" />
-        </form>
+            <!-- Dashboard: 3 ô số liệu nhanh -->
+            <div class="dashboard">
+                <div class="stat-card">
+                    <div class="num" th:text="${totalCount}">0</div>
+                    <div class="label">Total ingredients</div>
+                </div>
+                <div class="stat-card warn-low">
+                    <div class="num" th:text="${lowStockCount}">0</div>
+                    <div class="label">⚠ Low in stock</div>
+                </div>
+                <div class="stat-card warn-exp">
+                    <div class="num" th:text="${expiringCount}">0</div>
+                    <div class="label">⏱ Expiring soon</div>
+                </div>
+            </div>
 
-        <table class="table table-striped mt-3">
-            <tr>
-                <th>Name</th>
-                <th>Category</th>
-                <th>Supplier</th>
-                <th>Quantity</th>
-                <th>Unit</th>
-                <th>Price (€)</th>
-                <th></th>
-                <!-- Cột Delete chỉ MANAGER thấy -->
-                <th sec:authorize="hasRole('MANAGER')"></th>
-            </tr>
-            <tr th:each="ingredient : ${ingredients}" th:classappend="${ingredient.lowStock} ? 'table-danger' : ''">
-                <td th:text="${ingredient.name}"></td>
-                <td th:text="${ingredient.category != null ? ingredient.category.name : ''}"></td>
-                <td th:text="${ingredient.supplier != null ? ingredient.supplier.name : ''}"></td>
-                <td th:text="${ingredient.quantity}"></td>
-                <td th:text="${ingredient.unit}"></td>
-                <td th:text="${ingredient.price}"></td>
-                <td><a class="btn btn-primary btn-sm" th:href="@{/edit/{id}(id=${ingredient.id})}">Edit</a></td>
-                <!-- Nút Delete chỉ ADMIN thấy -->
-                <!-- Nút Delete chỉ MANAGER thấy -->
-                <td sec:authorize="hasRole('MANAGER')">
-                    <a class="btn btn-danger btn-sm" th:href="@{/delete/{id}(id=${ingredient.id})}">Delete</a>
-                </td>
-            </tr>
-        </table>
+            <!-- Ô tìm kiếm + lọc -->
+            <form th:action="@{/ingredientlist}" method="get" class="mb-3">
+                <input type="text" name="search" placeholder="Search by name or category..."
+                    class="form-control d-inline-block" style="width:260px" />
+                <button type="submit" class="btn btn-primary btn-sm">Search</button>
+                <a th:href="@{/ingredientlist}" class="btn btn-secondary btn-sm">Show all</a>
+                <a th:href="@{/ingredientlist(filter='lowstock')}" class="btn btn-warning btn-sm">⚠ Low stock</a>
+                <a th:href="@{/ingredientlist(filter='expiring')}" class="btn btn-warning btn-sm">⏱ Expiring soon</a>
+            </form>
 
-        <a class="btn btn-success" th:href="@{/add}">Add Ingredient</a>
+            <table class="table table-striped">
+                <tr>
+                    <th>Name</th>
+                    <th>Category</th>
+                    <th>Supplier</th>
+                    <th>Expiry</th>
+                    <th>Quantity</th>
+                    <th>Unit</th>
+                    <th>Price (€)</th>
+                    <th></th>
+                    <th sec:authorize="hasRole('MANAGER')"></th>
+                </tr>
+                <tr th:each="ingredient : ${ingredients}"
+                    th:classappend="${ingredient.lowStock} ? 'table-danger' : (${ingredient.expiringSoon} ? 'table-warning' : '')">
+                    <td th:text="${ingredient.name}"></td>
+                    <td th:text="${ingredient.category != null ? ingredient.category.name : ''}"></td>
+                    <td th:text="${ingredient.supplier != null ? ingredient.supplier.name : ''}"></td>
+                    <td th:text="${ingredient.expiryDate}"></td>
+                    <td th:text="${ingredient.quantity}"></td>
+                    <td th:text="${ingredient.unit}"></td>
+                    <td th:text="${ingredient.price}"></td>
+                    <td><a class="btn btn-primary btn-sm" th:href="@{/edit/{id}(id=${ingredient.id})}">Edit</a></td>
+                    <td sec:authorize="hasRole('MANAGER')">
+                        <a class="btn btn-danger btn-sm" th:href="@{/delete/{id}(id=${ingredient.id})}">Delete</a>
+                    </td>
+                </tr>
+            </table>
+
+            <!-- Tổng giá trị kho -->
+            <div class="total-box">
+                <strong>Total inventory value:</strong>
+                <span th:text="${#numbers.formatDecimal(totalValue, 1, 2)}">0.00</span> €
+            </div>
+
+            <div class="mt-3">
+                <a class="btn btn-success" th:href="@{/add}">+ Add Ingredient</a>
+            </div>
+
+        </div>
     </div>
 </body>
 

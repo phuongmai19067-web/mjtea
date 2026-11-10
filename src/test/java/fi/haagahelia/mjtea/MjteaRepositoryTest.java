@@ -1,5 +1,6 @@
 package fi.haagahelia.mjtea;
 
+import java.time.LocalDate;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
@@ -35,7 +36,7 @@ public class MjteaRepositoryTest {
     public void createNewIngredient() {
         Category cat = new Category("TestCat");
         categoryRepository.save(cat);
-        Ingredient ing = new Ingredient("Test Tea", 10.0, "kg", 5.0, 2.0, cat);
+        Ingredient ing = new Ingredient("Test Tea", 10.0, "kg", 5.0, 2.0, LocalDate.now().plusMonths(1), cat);
         ingredientRepository.save(ing);
         assertThat(ing.getId()).isNotNull();
     }
@@ -52,7 +53,7 @@ public class MjteaRepositoryTest {
     public void deleteIngredient() {
         Category cat = new Category("TempCat");
         categoryRepository.save(cat);
-        Ingredient ing = new Ingredient("To Delete", 1.0, "kg", 1.0, 1.0, cat);
+        Ingredient ing = new Ingredient("To Delete", 1.0, "kg", 1.0, 1.0, LocalDate.now().plusMonths(1), cat);
         ingredientRepository.save(ing);
         Long id = ing.getId();
         ingredientRepository.deleteById(id);

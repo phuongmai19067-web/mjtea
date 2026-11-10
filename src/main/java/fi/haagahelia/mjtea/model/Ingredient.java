@@ -1,5 +1,6 @@
 package fi.haagahelia.mjtea.model;
 
+import java.time.LocalDate;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -31,6 +32,9 @@ public class Ingredient {
     // Ngưỡng cảnh báo: nếu quantity thấp hơn số này thì coi là "sắp hết"
     private double lowStockThreshold;
 
+    // Ngày hết hạn của nguyên liệu
+    private LocalDate expiryDate;
+
     // Quan hệ NHIỀU Ingredient thuộc về MỘT Category.
     // @JoinColumn: tạo cột "categoryid" trong bảng ingredient để nối tới category.
     @ManyToOne
@@ -48,12 +52,13 @@ public class Ingredient {
 
     // Constructor đầy đủ để tạo nhanh dữ liệu mẫu
     public Ingredient(String name, double quantity, String unit, double price,
-            double lowStockThreshold, Category category) {
+            double lowStockThreshold, LocalDate expiryDate, Category category) {
         this.name = name;
         this.quantity = quantity;
         this.unit = unit;
         this.price = price;
         this.lowStockThreshold = lowStockThreshold;
+        this.expiryDate = expiryDate;
         this.category = category;
     }
 
@@ -126,5 +131,21 @@ public class Ingredient {
 
     public void setSupplier(Supplier supplier) {
         this.supplier = supplier;
+    }
+
+    public LocalDate getExpiryDate() {
+        return expiryDate;
+    }
+
+    public void setExpiryDate(LocalDate expiryDate) {
+        this.expiryDate = expiryDate;
+    }
+
+    // Trả về true nếu nguyên liệu hết hạn trong vòng 7 ngày tới (hoặc đã hết hạn)
+    public boolean isExpiringSoon() {
+        if (expiryDate == null) {
+            return false;
+        }
+        return expiryDate.isBefore(LocalDate.now().plusDays(7));
     }
 }

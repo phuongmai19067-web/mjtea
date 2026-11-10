@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+
+<head>
+    <meta charset="UTF-8">
+    <title>MJtea — Suppliers</title>
+    <link type="text/css" rel="stylesheet" href="/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" />
+    <link type="text/css" rel="stylesheet" href="/css/mjtea.css" th:href="@{/css/mjtea.css}" />
+</head>
+
+<body>
+    <div class="mjtea-header">
+        <h1>☕ MJtea</h1>
+        <div class="tagline">Suppliers</div>
+    </div>
+
+    <div class="container">
+        <div class="card-box">
+            <div class="topbar">
+                <span class="welcome">Welcome, <strong><span sec:authentication="name">Name</span></strong> 👋</span>
+                <a th:href="@{/ingredientlist}" class="btn btn-sm btn-secondary">← Back to inventory</a>
+            </div>
+
+            <table class="table table-striped">
+                <tr>
+                    <th>Name</th>
+                    <th>Contact</th>
+                    <th></th>
+                    <th sec:authorize="hasRole('MANAGER')"></th>
+                </tr>
+                <tr th:each="supplier : ${suppliers}">
+                    <td th:text="${supplier.name}"></td>
+                    <td th:text="${supplier.contact}"></td>
+                    <td><a class="btn btn-primary btn-sm" th:href="@{/editsupplier/{id}(id=${supplier.id})}">Edit</a>
+                    </td>
+                    <td sec:authorize="hasRole('MANAGER')">
+                        <a class="btn btn-danger btn-sm" th:href="@{/deletesupplier/{id}(id=${supplier.id})}">Delete</a>
+                    </td>
+                </tr>
+            </table>
+
+            <a class="btn btn-success" th:href="@{/addsupplier}">+ Add Supplier</a>
+        </div>
+    </div>
+</body>
+
+</html>
