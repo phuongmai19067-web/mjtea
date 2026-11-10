@@ -23,6 +23,7 @@
             <tr>
                 <th>Name</th>
                 <th>Category</th>
+                <th>Supplier</th>
                 <th>Quantity</th>
                 <th>Unit</th>
                 <th>Price (€)</th>
@@ -33,6 +34,7 @@
             <tr th:each="ingredient : ${ingredients}" th:classappend="${ingredient.lowStock} ? 'table-danger' : ''">
                 <td th:text="${ingredient.name}"></td>
                 <td th:text="${ingredient.category != null ? ingredient.category.name : ''}"></td>
+                <td th:text="${ingredient.supplier != null ? ingredient.supplier.name : ''}"></td>
                 <td th:text="${ingredient.quantity}"></td>
                 <td th:text="${ingredient.unit}"></td>
                 <td th:text="${ingredient.price}"></td>

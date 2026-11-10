@@ -37,6 +37,11 @@ public class Ingredient {
     @JoinColumn(name = "categoryid")
     private Category category;
 
+    // Quan hệ NHIỀU Ingredient thuộc về MỘT Supplier (nhà cung cấp).
+    @ManyToOne
+    @JoinColumn(name = "supplierid")
+    private Supplier supplier;
+
     // Constructor rỗng — JPA bắt buộc
     public Ingredient() {
     }
@@ -113,5 +118,13 @@ public class Ingredient {
 
     public void setCategory(Category category) {
         this.category = category;
+    }
+
+    public Supplier getSupplier() {
+        return supplier;
+    }
+
+    public void setSupplier(Supplier supplier) {
+        this.supplier = supplier;
     }
 }

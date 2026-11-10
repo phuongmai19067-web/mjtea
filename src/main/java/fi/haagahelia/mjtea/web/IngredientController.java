@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import fi.haagahelia.mjtea.model.Ingredient;
 import fi.haagahelia.mjtea.model.IngredientRepository;
+import fi.haagahelia.mjtea.model.SupplierRepository;
 import fi.haagahelia.mjtea.model.CategoryRepository;
 import org.springframework.security.access.prepost.PreAuthorize;
 
@@ -21,6 +22,9 @@ public class IngredientController {
 
     @Autowired
     private CategoryRepository categoryRepository;
+
+    @Autowired
+    private SupplierRepository supplierRepository;
 
     // Trang danh sách nguyên liệu
     @GetMapping("/ingredientlist")
@@ -34,6 +38,7 @@ public class IngredientController {
     public String addIngredient(Model model) {
         model.addAttribute("ingredient", new Ingredient());
         model.addAttribute("categories", categoryRepository.findAll());
+        model.addAttribute("suppliers", supplierRepository.findAll());
         return "addingredient";
     }
 
@@ -45,7 +50,6 @@ public class IngredientController {
     }
 
     // Xóa nguyên liệu theo id
-    // Chỉ ADMIN mới xóa được
     // Chỉ MANAGER mới xóa được
     @PreAuthorize("hasRole('MANAGER')")
     @GetMapping("/delete/{id}")
@@ -59,6 +63,7 @@ public class IngredientController {
     public String editIngredient(@PathVariable("id") Long ingredientId, Model model) {
         model.addAttribute("ingredient", repository.findById(ingredientId).get());
         model.addAttribute("categories", categoryRepository.findAll());
+        model.addAttribute("suppliers", supplierRepository.findAll());
         return "editingredient";
     }
 }
