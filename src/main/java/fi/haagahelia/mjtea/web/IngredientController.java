@@ -1,5 +1,7 @@
 package fi.haagahelia.mjtea.web;
 
+import java.util.List;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,9 +29,30 @@ public class IngredientController {
     private SupplierRepository supplierRepository;
 
     // Trang danh sách nguyên liệu
+    // Trang danh sách — hỗ trợ tìm kiếm (search) và lọc hàng sắp hết (lowstock)
     @GetMapping("/ingredientlist")
-    public String ingredientList(Model model) {
-        model.addAttribute("ingredients", repository.findAll());
+    public String ingredientList(
+            @RequestParam(required = false) String search,
+            @RequestParam(required = false) String filter,
+            Model model) {
+
+        List<Ingredient> ingredients;
+
+        if (search != null && !search.isEmpty()) {
+            // Tìm theo tên nguyên liệu HOẶC tên category
+            ingredients = repository.findByNameContainingIgnoreCaseOrCategoryNameContainingIgnoreCase(search, search);
+        } else {
+            ingredients = (List<Ingredient>) repository.findAll();
+        }
+
+        // Nếu chọn lọc "lowstock" → chỉ giữ những món sắp hết kho
+        if ("lowstock".equals(filter)) {
+            ingredients = ingredients.stream()
+                    .filter(Ingredient::isLowStock)
+                    .toList();
+        }
+
+        model.addAttribute("ingredients", ingredients);
         return "ingredientlist";
     }
 
